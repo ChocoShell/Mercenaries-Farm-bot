@@ -29,3 +29,6 @@ conf/*.*
 
 # Log file
 mfb.log
+
+# Build folder
+build/
