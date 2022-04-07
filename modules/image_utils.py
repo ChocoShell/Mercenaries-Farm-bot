@@ -54,21 +54,21 @@ def find_ellement(file, action, threshold="-", speed=settings_dict["bot_speed"])
         speed=speed,
     )
     if click_coords is not None:
-        x, y = click_coords
+        pos_x, pos_y = click_coords
         if action in [
             Action.get_coords_part_screen,
             Action.get_coords,
             Action.screenshot,
         ]:
             return click_coords
-        elif action == Action.move:
+        if action == Action.move:
             window = windowMP()
-            move_mouse(window, x, y)
+            move_mouse(window, pos_x, pos_y)
             return True
-        elif action == Action.move_and_click:
+        if action == Action.move_and_click:
             # move mouse and click
             window = windowMP()
-            move_mouse_and_click(window, x, y)
+            move_mouse_and_click(window, pos_x, pos_y)
             return True
     elif action in [Action.get_coords_part_screen, Action.get_coords]:
         return None
@@ -95,7 +95,6 @@ def find_element_from_file(
     Returns:
         (int, int): coordinates of center of element
     """
-    global partImg
     time.sleep(speed)
 
     if threshold == "-":

@@ -2,7 +2,7 @@ import logging
 import os
 
 from modules.exceptions import MissingSettingsFile
-from modules.file_utils import readINI, readjson
+from modules.file_utils import read_ini, readjson
 from modules.utils import update
 
 log = logging.getLogger(__name__)
@@ -46,6 +46,6 @@ def update_settings_with_file(setting_data, new_file):
     if not os.path.exists(new_file):
         raise MissingSettingsFile(f"Settings file: {new_file} not found")
 
-    new_setting_data = readjson(new_file) if new_file[-1] == "n" else readINI(new_file)
+    new_setting_data = readjson(new_file) if new_file[-1] == "n" else read_ini(new_file)
 
     return update(setting_data, new_setting_data)

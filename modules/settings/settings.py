@@ -4,7 +4,7 @@ import shutil
 
 from modules.exceptions import (MissingGameDirectory, SettingsError,
                                 UnsetGameDirectory)
-from modules.file_utils import parseINI, readINI
+from modules.file_utils import parse_ini, read_ini
 
 log = logging.getLogger(__name__)
 
@@ -23,10 +23,10 @@ def get_settings(settings_filename):
         8: WaitForEXP (3),
         9: Zonelog (GameDir/Logs/Zone.log)
     """
-    raw_settings = readINI(settings_filename)
+    raw_settings = read_ini(settings_filename)
 
     try:
-        settings_dict = parseINI(raw_settings["BotSettings"])
+        settings_dict = parse_ini(raw_settings["BotSettings"])
 
         if not settings_dict["gamedir"]:
             raise UnsetGameDirectory("Game Dir setting is not set")

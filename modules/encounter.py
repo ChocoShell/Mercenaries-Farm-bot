@@ -1,4 +1,3 @@
-import configparser
 import logging
 import random
 import re
@@ -7,16 +6,9 @@ import time
 from .constants import Action, Button, Checker, UIElement
 from .image_utils import find_ellement, partscreen
 from .log_board import LogHSMercs
-from .mouse_utils import (mouse_click, mouse_scroll, move_mouse,
-                          move_mouse_and_click)
+from .mouse_utils import mouse_click, move_mouse, move_mouse_and_click
 from .platform import windowMP
 from .settings import ability_order, mercsAbilities, mercslist, settings_dict
-
-# import pyautogui
-
-
-
-
 
 log = logging.getLogger(__name__)
 
@@ -101,14 +93,15 @@ def select_ability(localhero):
             ability = 1
 
         chooseone3 = [windowMP()[2] // 3, windowMP()[2] // 2, windowMP()[2] // 1.5]
-        log.info(f"ability selected : {ability}")
+        log.info("ability selected : %s", ability)
         if ability == 0:
             log.debug("No ability selected (0)")
             retour = False
-        elif ability >= 1 and ability <= 3:
+        elif 1 <= ability <= 3:
             log.debug(
-                f"abilities Y : {abilitiesPositionY} |"
-                f" abilities X : {abilitiesPositionX}"
+                "abilities Y : %s | abilities X : %s",
+                abilitiesPositionY,
+                abilitiesPositionX,
             )
             partscreen(
                 int(abilitiesWidth),
@@ -133,7 +126,7 @@ def select_ability(localhero):
                     move_mouse_and_click(windowMP(), chooseone3[0], windowMP()[3] // 2)
                     retour = False
         else:
-            log.info(f"No ability selected for {localhero}")
+            log.info("No ability selected for %s", localhero)
     else:
         localhero = re.sub(r" [0-9]$", "", localhero)
         if "Neutral" in ability_order and localhero in ability_order["Neutral"]:
@@ -343,9 +336,9 @@ def battle():
             retour = "win"
             move_mouse_and_click(windowMP(), windowMP()[2] / 2, windowMP()[3] / 1.3)
             zoneLog.cleanBoard()
-
             break
-        elif find_ellement(Checker.lose.filename, Action.screenshot):
+
+        if find_ellement(Checker.lose.filename, Action.screenshot):
             retour = "loose"
             move_mouse_and_click(
                 windowMP(),
@@ -354,7 +347,8 @@ def battle():
             )
             zoneLog.cleanBoard()
             break
-        elif find_ellement(
+
+        if find_ellement(
             Button.fight.filename, Action.screenshot
         ):  # or find_ellement(Button.startbattle1.filename, Action.screenshot):
 
@@ -415,9 +409,7 @@ def battle():
                 time.sleep(0.1)
 
             i = 0
-            while True:
-                if find_ellement(Button.allready.filename, Action.move_and_click):
-                    break
+            while not find_ellement(Button.allready.filename, Action.move_and_click):
                 if i > 10:
                     mouse_click("right")
                     find_ellement(Button.fight.filename, Action.move_and_click)

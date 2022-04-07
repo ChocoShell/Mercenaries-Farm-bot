@@ -1,15 +1,26 @@
+from modules.exceptions import WindowManagerError
+
 from .platform import find_os
 from .window_managers.linux import WindowMgrLinux
 from .window_managers.windows import get_window_mgr_on_windows
 
 
 def get_window_manager():
-    os = find_os()
+    """Get Window Manager
 
-    if os == "windows":
+    Raises:
+        Exception: Could not find window manager for OS
+
+    Returns:
+        WindowManager: Window Manager Object for specific OS
+    """
+    operating_system = find_os()
+
+    if operating_system == "windows":
         WindowMgrWindows = get_window_mgr_on_windows()
         return WindowMgrWindows()
-    elif os == "linux":
+
+    if operating_system == "linux":
         return WindowMgrLinux()
-    else:
-        raise Exception(f"OS not recognized: {os}")
+
+    raise WindowManagerError(f"OS not recognized: {operating_system}")

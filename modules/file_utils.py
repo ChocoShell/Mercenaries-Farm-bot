@@ -18,11 +18,11 @@ def readjson(jfile):
 
 def read_ini_to_dict(inifile):
     """read ini file to parsed dictionary"""
-    log.debug(f"Reading {inifile}")
-    return parseINI(readINI(inifile))
+    log.debug("Reading %s", inifile)
+    return parse_ini(read_ini(inifile))
 
 
-def parseINI(inidict):
+def parse_ini(inidict):
     """... just for transform value into right type"""
     initype = {}
     for k in inidict.keys():
@@ -39,7 +39,7 @@ def parseINI(inidict):
     return initype
 
 
-def readINI(inifile):
+def read_ini(inifile):
     """... just for reading .ini file and return data"""
     config = configparser.ConfigParser()
     try:

@@ -7,14 +7,8 @@ from .constants import Action, Button, UIElement
 from .encounter import selectCardsInHand
 from .game import waitForItOrPass
 from .image_utils import find_ellement
-from .mouse_utils import (
-    mouse_click,
-    mouse_position,
-    mouse_range,
-    mouse_scroll,
-    move_mouse,
-    move_mouse_and_click,
-)
+from .mouse_utils import (mouse_click, mouse_position, mouse_range,
+                          mouse_scroll, move_mouse, move_mouse_and_click)
 from .platform import windowMP
 from .settings import jposition, settings_dict
 
@@ -77,7 +71,7 @@ def nextlvl():
             time.sleep(1.5)
 
         elif find_ellement(Button.visit.filename, Action.move_and_click):
-            y = windowMP()[3] // 2.2
+            pos_y = windowMP()[3] // 2.2
             time.sleep(7)
             while find_ellement(UIElement.visitor.filename, Action.screenshot):
                 if settings_dict["stopatstranger"]:
@@ -85,9 +79,9 @@ def nextlvl():
                     exit(1)
 
                 temp = random.choice([3, 2, 1.7])
-                x = windowMP()[2] // temp
+                pos_x = windowMP()[2] // temp
 
-                move_mouse_and_click(windowMP(), x, y)
+                move_mouse_and_click(windowMP(), pos_x, pos_y)
 
                 time.sleep(0.2)
                 find_ellement(Button.choose_task.filename, Action.move_and_click)
@@ -111,23 +105,25 @@ def nextlvl():
             time.sleep(1)
             find_ellement(UIElement.spirithealer.filename, Action.move_and_click)
         else:
-            x, y = mouse_position(windowMP())
-            log.debug(f"Mouse (x, y) : ({x}, {y})")
-            if y >= (windowMP()[3] // 2.2 - mouse_range) and y <= (
-                windowMP()[3] // 2.2 + mouse_range
+            pos_x, pos_y = mouse_position(windowMP())
+            log.debug("Mouse (x, y) : (%s, %s)", pos_x, pos_y)
+            if (
+                (windowMP()[3] // 2.2 + mouse_range)
+                >= pos_y
+                >= (windowMP()[3] // 2.2 - mouse_range)
             ):
-                x += windowMP()[2] // 25
+                pos_x += windowMP()[2] // 25
             else:
-                x = windowMP()[2] // 3.7
+                pos_x = windowMP()[2] // 3.7
 
-            if x > windowMP()[2] // 1.5:
-                log.debug("Didnt find a battle. Try to go 'back'")
+            if pos_x > windowMP()[2] // 1.5:
+                log.debug("Didn't find a battle. Try to go 'back'")
                 find_ellement(Button.back.filename, Action.move_and_click)
                 retour = False
             else:
-                y = windowMP()[3] // 2.2
-                log.debug(f"move mouse to (x, y) : ({x}, {y})")
-                move_mouse_and_click(windowMP(), x, y)
+                pos_y = windowMP()[3] // 2.2
+                log.debug("Mouse (x, y) : (%s, %s)", pos_x, pos_y)
+                move_mouse_and_click(windowMP(), pos_x, pos_y)
 
     return retour
 
@@ -137,9 +133,9 @@ def chooseTreasure():
     Note: should be updated to select "good" (passive?) treasure instead of a random one
     """
     temp = random.choice([2.3, 1.7, 1.4])
-    y = windowMP()[3] // 2
-    x = windowMP()[2] // temp
-    move_mouse_and_click(windowMP(), x, y)
+    pos_y = windowMP()[3] // 2
+    pos_x = windowMP()[2] // temp
+    move_mouse_and_click(windowMP(), pos_x, pos_y)
     time.sleep(0.5)
     while True:
         if find_ellement(Button.take.filename, Action.move_and_click):
@@ -179,7 +175,7 @@ def travelpointSelection():
                     getattr(UIElement, location).filename, Action.move_and_click
                 )
             except Exception:
-                log.error(f"Travel Point unknown : {location}")
+                log.error("Travel Point unknown : %s", location)
 
         move_mouse(windowMP(), windowMP()[2] // 2, windowMP()[3] // 2)
         time.sleep(0.5)
@@ -205,10 +201,7 @@ def goToEncounter():
     travelEnd = False
 
     while not travelEnd:
-        # ToDo : add a tempo when you detect a new completed task
-        # if find (task completed) :
-        #   time.sleep(2)
-
+        # ToDo : add a tempo when pos_you detect a new completed task
         if find_ellement(Button.play.filename, Action.screenshot):
             if settings_dict["quitbeforebossfight"] == True and find_ellement(
                 UIElement.boss.filename, Action.screenshot
@@ -223,28 +216,26 @@ def goToEncounter():
             retour = (
                 selectCardsInHand()
             )  # Start the battle : the bot choose the cards and fight against the enemy
-            log.info(f"goToEncounter - retour = {retour}")
+            log.info("goToEncounter - retour = %s", retour)
             time.sleep(1)
             if retour == "win":
                 log.info("goToEncounter : battle won")
                 while True:
-                    if not find_ellement(
-                        UIElement.take_grey.filename, Action.screenshot
-                    ):
-                        mouse_click()
-                        time.sleep(0.5)
-                    else:
+                    if find_ellement(UIElement.take_grey.filename, Action.screenshot):
                         chooseTreasure()
                         break
 
-                    if not find_ellement(
+                    mouse_click()
+                    time.sleep(0.5)
+
+                    if find_ellement(
                         UIElement.replace_grey.filename, Action.screenshot
                     ):
-                        mouse_click()
-                        time.sleep(0.5)
-                    else:
                         chooseTreasure()
                         break
+
+                    mouse_click()
+                    time.sleep(0.5)
 
                     if find_ellement(
                         UIElement.presents_thing.filename, Action.screenshot
@@ -265,9 +256,8 @@ def goToEncounter():
             waitForItOrPass(UIElement.campfire.filename, 5)
             look_at_campfire_completed_tasks()
 
-        else:
-            if not nextlvl():
-                break
+        elif not nextlvl():
+            break
 
     while not find_ellement(Button.back.filename, Action.screenshot):
         mouse_click()
