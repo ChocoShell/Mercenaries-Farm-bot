@@ -126,7 +126,7 @@ def nextlvl():
                 log.debug("Didnt find a battle. Try to go 'back'")
                 find_ellement(Button.back.filename, Action.move_and_click)
                 retour = False
-            else :
+            else:
                 y = windowMP()[3] // 2.2
                 log.debug(f"move mouse to (x, y) : ({x}, {y})")
                 move_mouse_and_click(windowMP(), x, y)
@@ -266,7 +266,7 @@ def goToEncounter():
 
             waitForItOrPass(UIElement.campfire.filename, 5)
             look_at_campfire_completed_tasks()
-                
+
         else:
             if not nextlvl():
                 break

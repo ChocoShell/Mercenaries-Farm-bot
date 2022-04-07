@@ -27,15 +27,18 @@ def look_at_campfire_completed_tasks():
     if find_ellement(UIElement.campfire.filename, Action.screenshot):
         while find_ellement(UIElement.campfire.filename, Action.screenshot):
             waitForItOrPass(Button.campfire_completed_task, 5)
-            if find_ellement(Button.campfire_completed_task.filename, Action.move_and_click):
-                while not find_ellement(Button.campfire_claim.filename, Action.move_and_click):
+            if find_ellement(
+                Button.campfire_completed_task.filename, Action.move_and_click
+            ):
+                while not find_ellement(
+                    Button.campfire_claim.filename, Action.move_and_click
+                ):
                     time.sleep(0.5)
-                   
+
                 while not find_ellement(UIElement.campfire.filename, Action.screenshot):
                     mouse_click()
                     time.sleep(1)
             else:
                 break
-    
+
         move_mouse_and_click(windowMP(), windowMP()[2] / 1.25, windowMP()[3] / 2)
-    

@@ -40,7 +40,7 @@ def get_settings(settings_filename):
                 game_dir, "Logs/Zone.log"
             ).as_posix()
     except KeyError as kerr:
-        log.error(f"Settings file is missing section {kerr}")
+        log.error("Settings file is missing section %s", kerr)
         raise SettingsError(f"Settings file is missing section {kerr}") from kerr
 
     return settings_dict
