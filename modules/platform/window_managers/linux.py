@@ -1,5 +1,5 @@
-import time
 import logging
+import time
 
 from .base import WindowMgr
 
@@ -8,7 +8,7 @@ try:
     import gi
 
     gi.require_version("Wnck", "3.0")
-    from gi.repository import Wnck, Gtk
+    from gi.repository import Gtk, Wnck
 except ImportError:
     log.info("gi.repository not installed")
 

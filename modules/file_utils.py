@@ -1,7 +1,8 @@
-import json
 import configparser
-import re
+import json
 import logging
+import re
+
 from modules.exceptions import SettingsError
 
 log = logging.getLogger(__name__)

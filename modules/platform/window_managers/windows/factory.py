@@ -1,7 +1,7 @@
 import logging
 
-from .win32gui_manager import WindowMgrWindowsWin32Gui, HAS_WIN32GUI
-from .ahk_manager import WindowMgrWindowsAHK, HAS_AHK
+from .ahk_manager import HAS_AHK, WindowMgrWindowsAHK
+from .win32gui_manager import HAS_WIN32GUI, WindowMgrWindowsWin32Gui
 
 log = logging.getLogger(__name__)
 

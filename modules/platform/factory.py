@@ -1,6 +1,6 @@
 from .platform import find_os
-from .window_managers.windows import get_window_mgr_on_windows
 from .window_managers.linux import WindowMgrLinux
+from .window_managers.windows import get_window_mgr_on_windows
 
 
 def get_window_manager():

@@ -1,12 +1,10 @@
+import logging
 import time
 
+from .constants import Action, Button, Checker
 from .image_utils import find_ellement
-from .constants import Checker, Button, Action
-
 from .mouse_utils import move_mouse
 from .platform import windowMP
-
-import logging
 
 log = logging.getLogger(__name__)
 

@@ -1,22 +1,14 @@
+import logging
 import random
 import time
 
-from .platform import windowMP
-from .mouse_utils import (
-    move_mouse_and_click,
-    move_mouse,
-    mouse_position,
-    mouse_click,
-    mouse_scroll,
-    mouse_range,
-)
-
-from .constants import UIElement, Button, Action
-from .image_utils import find_ellement
-from .settings import settings_dict, jposition
+from .constants import Action, Button, UIElement
 from .game import waitForItOrPass
-
-import logging
+from .image_utils import find_ellement
+from .mouse_utils import (mouse_click, mouse_position, mouse_range,
+                          mouse_scroll, move_mouse, move_mouse_and_click)
+from .platform import windowMP
+from .settings import jposition, settings_dict
 
 log = logging.getLogger(__name__)
 

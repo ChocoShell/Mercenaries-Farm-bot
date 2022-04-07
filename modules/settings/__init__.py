@@ -1,8 +1,8 @@
 import logging
 
-
+from .conf import (ability_order, jposition, jthreshold, mercsAbilities,
+                   mercslist)
 from .settings import get_settings
-from .conf import jthreshold, jposition, mercslist, mercsAbilities, ability_order
 
 log = logging.getLogger(__name__)
 

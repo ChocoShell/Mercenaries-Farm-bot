@@ -1,19 +1,21 @@
-import re
-import time
-import random
 import configparser
 import logging
+import random
+import re
+import time
+
+from .constants import Action, Button, Checker, UIElement
+from .image_utils import find_ellement, partscreen
+from .log_board import LogHSMercs
+from .mouse_utils import (mouse_click, mouse_scroll, move_mouse,
+                          move_mouse_and_click)
+from .platform import windowMP
+from .settings import ability_order, mercsAbilities, mercslist, settings_dict
 
 # import pyautogui
 
 
-from .platform import windowMP
-from .mouse_utils import move_mouse_and_click, move_mouse, mouse_click, mouse_scroll
 
-from .image_utils import partscreen, find_ellement
-from .constants import UIElement, Checker, Button, Action
-from .log_board import LogHSMercs
-from .settings import settings_dict, mercslist, mercsAbilities, ability_order
 
 
 log = logging.getLogger(__name__)

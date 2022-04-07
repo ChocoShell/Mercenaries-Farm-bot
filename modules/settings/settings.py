@@ -2,9 +2,9 @@ import logging
 import pathlib
 import shutil
 
-from modules.exceptions import MissingGameDirectory, UnsetGameDirectory, SettingsError
+from modules.exceptions import (MissingGameDirectory, SettingsError,
+                                UnsetGameDirectory)
 from modules.file_utils import parseINI, readINI
-
 
 log = logging.getLogger(__name__)
 

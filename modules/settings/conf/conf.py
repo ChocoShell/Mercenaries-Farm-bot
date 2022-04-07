@@ -1,9 +1,9 @@
-import os
 import logging
+import os
 
-from modules.file_utils import readjson, readINI
-from modules.utils import update
 from modules.exceptions import MissingSettingsFile
+from modules.file_utils import readINI, readjson
+from modules.utils import update
 
 log = logging.getLogger(__name__)
 

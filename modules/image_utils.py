@@ -1,16 +1,13 @@
+import logging
 import time
 
 import cv2
 import numpy as np
 
-
-from .platform import windowMP
-from .mouse_utils import move_mouse_and_click, move_mouse
-
-from .settings import settings_dict, jthreshold
 from .constants import Action
-
-import logging
+from .mouse_utils import move_mouse, move_mouse_and_click
+from .platform import windowMP
+from .settings import jthreshold, settings_dict
 
 log = logging.getLogger(__name__)
 

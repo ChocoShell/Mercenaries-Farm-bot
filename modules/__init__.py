@@ -1,3 +1,8 @@
+"""
+Mercenaries Farm Bot
+
+We set up the logging before anything else
+"""
 import logging
 import logging.config
 
