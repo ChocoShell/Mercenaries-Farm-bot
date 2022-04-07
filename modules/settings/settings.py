@@ -2,8 +2,7 @@ import logging
 import pathlib
 import shutil
 
-from modules.exceptions import (MissingGameDirectory, SettingsError,
-                                UnsetGameDirectory)
+from modules.exceptions import MissingGameDirectory, SettingsError, UnsetGameDirectory
 from modules.file_utils import parse_ini, read_ini
 
 log = logging.getLogger(__name__)
@@ -35,10 +34,10 @@ def get_settings(settings_filename):
 
         if not game_dir.is_dir():
             raise MissingGameDirectory(f"Game directory ({game_dir}) does not exist")
-        else:
-            settings_dict["zonelog"] = pathlib.PurePath(
-                game_dir, "Logs/Zone.log"
-            ).as_posix()
+
+        settings_dict["zonelog"] = pathlib.PurePath(
+            game_dir, "Logs/Zone.log"
+        ).as_posix()
     except KeyError as kerr:
         log.error("Settings file is missing section %s", kerr)
         raise SettingsError(f"Settings file is missing section {kerr}") from kerr

@@ -1,10 +1,10 @@
 #! /usr/bin/env python3
 import time
+import logging
 
 from modules.gameloop import where
 from modules.platform import win
 
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ def main():
             if win.find_game():
                 where()
         except Exception as error:
-            log.error(f"Error: {error}")
+            log.error("Error: %s", error)
             time.sleep(1)
 
 
