@@ -87,7 +87,4 @@ class LogHSMercs:
         self.mercsId = {}
 
     def getBoard(self):
-        board = {}
-        for key in self.myBoard.keys():
-            board[key] = self.mercsId[self.myBoard[key]]
-        return board
+        return {key: self.mercsId[self.myBoard[key]] for key in self.myBoard.keys()}

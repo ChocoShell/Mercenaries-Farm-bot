@@ -57,12 +57,11 @@ def select_random_enemy_to_attack(enemies=None):
     mouse_click("right")
 
 
-def select_ability(localhero):
+def select_ability(localhero, raund):
     """Select an ability for a mercenary.
         Depend on what is available and wich Round (battle)
     Click only on the ability (doesnt move to an enemy)
     """
-    global raund
     abilitiesWidth = windowMP()[2] // 14.2
     abilitiesHeigth = windowMP()[3] // 7.2
 
@@ -81,8 +80,11 @@ def select_ability(localhero):
     retour = False
 
     if localhero in mercsAbilities:
-        if "Mercenary" in ability_order and localhero in ability_order["Mercenary"]:
-            round_abilities = ability_order["Mercenary"][localhero].split(",")
+        if (
+            "Mercenary" in ability_order
+            and localhero.lower() in ability_order["Mercenary"]
+        ):
+            round_abilities = ability_order["Mercenary"][localhero.lower()].split(",")
             abilitiesNumber = len(round_abilities)
             if abilitiesNumber != 0:
                 ability = raund % abilitiesNumber
@@ -131,8 +133,8 @@ def select_ability(localhero):
             log.info(f"No ability selected for {localhero}")
     else:
         localhero = re.sub(r" [0-9]$", "", localhero)
-        if "Neutral" in ability_order and localhero in ability_order["Neutral"]:
-            round_abilities = ability_order["Neutral"][localhero].split(",")
+        if "Neutral" in ability_order and localhero.lower() in ability_order["Neutral"]:
+            round_abilities = ability_order["Neutral"][localhero.lower()].split(",")
             abilitiesNumber = len(round_abilities)
             if abilitiesNumber != 0:
                 ability = raund % abilitiesNumber
@@ -175,6 +177,7 @@ def attacks(
     enemynoclass,
     enemynoclass2,
     mol,
+    raund,
 ):
     """
     Function to attack an enemy (red, green or blue ideally)
@@ -184,9 +187,22 @@ def attacks(
     blue attacks red (if exists)
     else merc attacks minion with special abilities or neutral
     """
-    global raund
+    """
+    Enemies should be passed in in a way that allows for multiple of the same enemy type.
+    """
 
     log.debug("Attacks function")
+
+    class Board:
+        def __init__(self):
+            card_size = int(windowMP()[2] / 12)
+            first_even = int(windowMP()[0] + (windowMP()[2] / 3.6))
+
+            # positionEven=[560,720,880,1040,1200,1360]
+            # positionOdd=[640,800,960,1120,1280]
+            positions = [first_even + i * card_size // 2 for i in range(11)]
+            self.position_even = positions[::2]
+            self.position_odd = positions[1::2]
 
     cardSize = int(windowMP()[2] / 12)
     firstOdd = int(windowMP()[0] + (windowMP()[2] / 3))
@@ -205,6 +221,7 @@ def attacks(
         pos = int(2 - (number / 2 - 1) + (position - 1))
         x = positionEven[pos]
     else:  # if mercenaries number is odd
+        pos = int(2 - (number / 2 - 1 / 2) + (position - 1))
         pos = int(2 - (number - 1) / 2 + (position - 1))
         x = positionOdd[pos]
     y = windowMP()[3] / 1.5
@@ -214,10 +231,34 @@ def attacks(
     move_mouse_and_click(windowMP(), x, y)
     time.sleep(0.2)
     move_mouse(windowMP(), windowMP()[2] / 3, windowMP()[3] / 2)
+
+    take_turn_action(
+        mercName,
+        raund,
+        enemyred,
+        enemygreen,
+        enemyblue,
+        enemynoclass,
+        enemynoclass2,
+        mol,
+    )
+
+
+def take_turn_action(
+    mercName,
+    raund,
+    enemyred,
+    enemygreen,
+    enemyblue,
+    enemynoclass,
+    enemynoclass2,
+    mol,
+):
+
     if mercName in mercslist:
         if (
             mercslist[mercName]["type"] == "Protector"
-            and select_ability(mercName)
+            and select_ability(mercName, raund)
             and not select_enemy_to_attack(enemygreen)
             and not select_enemy_to_attack(mol)
             and not select_enemy_to_attack(enemynoclass)
@@ -226,7 +267,7 @@ def attacks(
             select_random_enemy_to_attack([enemyred, enemyblue])
         elif (
             mercslist[mercName]["type"] == "Fighter"
-            and select_ability(mercName)
+            and select_ability(mercName, raund)
             and not select_enemy_to_attack(enemyblue)
             and not select_enemy_to_attack(mol)
             and not select_enemy_to_attack(enemynoclass)
@@ -235,14 +276,14 @@ def attacks(
             select_random_enemy_to_attack([enemyred, enemygreen])
         elif (
             mercslist[mercName]["type"] == "Caster"
-            and select_ability(mercName)
+            and select_ability(mercName, raund)
             and not select_enemy_to_attack(enemyred)
             and not select_enemy_to_attack(mol)
             and not select_enemy_to_attack(enemynoclass)
             and not select_enemy_to_attack(enemynoclass2)
         ):
             select_random_enemy_to_attack([enemygreen, enemyblue])
-    elif select_ability(mercName):
+    elif select_ability(mercName, raund):
         select_random_enemy_to_attack(
             [enemyred, enemygreen, enemyblue, enemynoclass, enemynoclass2]
         )
@@ -309,7 +350,6 @@ def battle():
     """Find the cards on the battlefield (yours and those of your opponents)
     and make them battle until one of yours die
     """
-    global raund
     retour = True
 
     # init the reading of Hearthstone filelog to detect your board / mercenaries
@@ -403,6 +443,7 @@ def battle():
                     enemynoclass,
                     enemynoclass2,
                     mol,
+                    raund,
                 )
                 # in rare case, the bot detects an enemy ("noclass" most of the times) outside of the battlezone.
                 # the second click (to select the enemy), which is on an empty space, doesnt work.
